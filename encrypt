@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+string createCustomAlphabetFromKeyword(const string& keyword) {
+    string uniqueLetters = "";
+    string remainingLetters = "";
+
+    for (char c : keyword) {
+        if (find(uniqueLetters.begin(), uniqueLetters.end(), c) == uniqueLetters.end())
+            uniqueLetters += c;
+    }
+
+    for (char c = 'a'; c <= 'z'; ++c) {
+        if (uniqueLetters.find(c) == string::npos)
+            remainingLetters += c;
+    }
+
+    string customAlphabet = uniqueLetters + remainingLetters;
+    return customAlphabet;
+}
+
+string encryptText(const string& text, const string& customAlphabet) {
+    string encryptedText = "";
+
+    for (char c : text) {
+        if (isalpha(c)) {
+            char originalChar = tolower(c);
+            int index = originalChar - 'a';
+            encryptedText += isupper(c) ? toupper(customAlphabet[index]) : customAlphabet[index];
+        } else {
+            encryptedText += c;
+        }
+    }
+
+    return encryptedText;
+}
+
+int main() {
+    string text;
+    cout << "Enter the text: ";
+    getline(cin, text);
+
+    string keyword;
+    cout << "Enter the keyword: ";
+    cin >> keyword;
+
+    string customAlphabet = createCustomAlphabetFromKeyword(keyword);
+    string encryptedText = encryptText(text, customAlphabet);
+
+    cout << "Encrypted Text: " << encryptedText << "\n";
+
+    return 0;
+}
