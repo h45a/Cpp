@@ -3,7 +3,8 @@
 
 using namespace std;
 
-
+class czr{
+    public:
 string caesarCipherEncode(const string& text, int shift) {
     string result = "";
 
@@ -28,8 +29,9 @@ string caesarCipherDecode(const string& text, int shift) {
 
     return result;
 }
-
+};
 int main() {
+    czr a;
     string input;
     int shift;
 
@@ -40,11 +42,11 @@ int main() {
     cin >> shift;
 
 
-    string encoded = caesarCipherEncode(input, shift);
+    string encoded = a.caesarCipherEncode(input, shift);
     cout << "Encoded text: " << encoded << endl;
 
  
-    string decoded = caesarCipherDecode(encoded, shift);
+    string decoded = a.caesarCipherDecode(encoded, shift);
     cout << "Decoded text: " << decoded << endl;
 
     return 0;
