@@ -1,55 +1,81 @@
 #include <iostream>
 #include <string>
+
 using namespace std;
 
-class Alg {
-public:
-    string encryptDecrypt(string input, int key) {
-        int len = input.size();
-        int row = (len + key - 1) / key;
-        char mat[row][key];
+class Alg{
+    public:
+string encrypt(string text, int key) {
+    int textLength = text.length();
+    int rows = (textLength + key - 1) / key;
+    char grid[rows][key];
 
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < key; j++) {
-                int index = (i * key) + j;
-                if (index < len) {
-                    mat[i][j] = input[index];
-                } else {
-                    mat[i][j] = ' '; 
-                }
-            }
-        }
-
-        string output = "";
-        
+    for (int i = 0; i < rows; i++) {
         for (int j = 0; j < key; j++) {
-            for (int i = 0; i < row; i++) {
-                output += mat[i][j];
+            grid[i][j] = ' '; 
+        }
+    }
+
+    int index = 0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < key; j++) {
+            if (index < textLength) {
+                grid[i][j] = text[index++];
             }
         }
-
-        return output;
     }
+
+    string ciphertext = "";
+    for (int j = 0; j < key; j++) { 
+        for (int i = 0; i < rows; i++) {
+                ciphertext += grid[i][j];
+        }
+    }
+    
+    return ciphertext;
+}
+
+string decrypt(string ciphertext, int key) {
+    int textLength = ciphertext.length();
+    int rows = (textLength + key - 1) / key;
+    char grid[rows][key];
+
+    int index = 0;
+    for (int j = 0; j < key; j++) { 
+        for (int i = 0; i < rows; i++) {
+            if (index < textLength) {
+                grid[i][j] = ciphertext[index++];
+            } else {
+                grid[i][j] = ' '; 
+            }
+        }
+    }
+
+    string text = "";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < key; j++) {
+                text += grid[i][j];
+        }
+    }
+
+    return text;
+}
 };
-
 int main() {
-    int key;
     string text;
-    cout << "Enter the text: " << endl;
-    getline(cin, text);
+    int key;
+Alg a;
 
-    cout << "Enter the key: (number: 2, 3... )" << endl;
+    cout << "Enter text: ";
+    getline(cin, text);
+    cout << "Enter number of columns (key): ";
     cin >> key;
 
-    Alg a;
-    string encryptedText = a.encryptDecrypt(text, key);
+    string ciphertext = a.encrypt(text, key);
+    cout << "Encrypted Text: " << ciphertext << endl;
 
-    cout << "Original: " << text << endl;
-    cout << "Encrypted: " << encryptedText << endl;
-
-    string decryptedText = a.encryptDecrypt(encryptedText, key); 
-    cout << "Decrypted: " << decryptedText << endl;
+    string decryptedText = a.decrypt(ciphertext, key);
+    cout << "Decrypted Text: " << decryptedText << endl;
 
     return 0;
 }
