@@ -1,0 +1,60 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int sumOfRange(int lower, int upper) {
+    int n = upper - lower + 1;
+    return (n * (lower + upper)) / 2;
+}
+
+int findMissingNumber(int arr[], int size, int lower, int upper) {
+    int sumRange = sumOfRange(lower, upper);
+    int sumArray = 0;
+    for (int i = 0; i < size; i++) {
+        sumArray += arr[i];
+    }
+    return sumRange - sumArray;
+}
+
+int main() {
+    int lower, upper;
+
+    cout << "Enter the lower limit of the range: ";
+    cin >> lower;
+    cout << "Enter the upper limit of the range: ";
+    cin >> upper;
+
+    if (upper - lower > 100) {
+        cout << "The difference between upper and lower limits must not be more than 100." << endl;
+        return 1;
+    }
+
+    int size = upper - lower + 1;
+    int arr[100];
+
+    for (int i = 0; i < size; i++) {
+        arr[i] = lower + i;
+    }
+
+    srand(time(0));
+
+    int removedIndex = rand() % size;
+    int removedNumber = arr[removedIndex];
+
+    for (int i = removedIndex; i < size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+
+    cout << "Array with the missing number: ";
+    for (int i = 0; i < size - 1; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    int missingNumber = findMissingNumber(arr, size - 1, lower, upper);
+    cout << "The missing number is: " << missingNumber << endl;
+
+    return 0;
+}
