@@ -22,7 +22,33 @@ string runLengthEncode(const string &input) {
 
     return encoded;
 }
+string runLengthDecode(const string &encoded) {
+    string decoded = "";
+    int n = encoded.length();
+    int i = 0;
 
+    while (i < n) {
+        char currentChar = encoded[i];
+        i++;
+
+        string countStr = "";
+        while (i < n && isdigit(encoded[i])) {
+            countStr += encoded[i];
+            i++;
+        }
+
+        int count = (countStr.empty()) ? 1 : stoi(countStr);
+        
+        decoded += string(count, currentChar);
+
+
+        if (i < n && encoded[i] == 'F' && i + 1 < n && encoded[i + 1] == 'F') {
+            i += 2; 
+        }
+    }
+
+    return decoded;
+}
 int main() {
     string input;
     cout << "Enter a string to encode: ";
@@ -30,6 +56,10 @@ int main() {
 
     string encodedString = runLengthEncode(input);
     cout << "Encoded string: " << encodedString << endl;
+
+
+    string decodedString = runLengthDecode(encodedString);
+    cout << "Decoded string: " << decodedString << endl;
 
     return 0;
 }
