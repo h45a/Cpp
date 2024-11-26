@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,7 +12,6 @@ void compress(const string &input, int windowSize, vector<int> &offsets, vector<
         int matchOffset = 0, matchLength = 0;
 
         int start = max(0, i - windowSize);
-
         for (int j = start; j < i; ++j) {
             int k = 0;
             while (i + k < input.length() && input[j + k] == input[i + k]) {
@@ -31,6 +31,26 @@ void compress(const string &input, int windowSize, vector<int> &offsets, vector<
     }
 }
 
+string decompress(const vector<int> &offsets, const vector<int> &lengths, const vector<char> &nextChars) {
+    string result;
+    
+    for (int i = 0; i < offsets.size(); ++i) {
+        int offset = offsets[i];
+        int length = lengths[i];
+        char nextChar = nextChars[i];
+
+        if (length > 0) {
+            result.append(result, result.size() - offset, length);
+        }
+
+        if (nextChar != '\0') {
+            result.push_back(nextChar);
+        }
+    }
+
+    return result;
+}
+
 int main() {
     string input = "abracadabra";
     int windowSize = 5;
@@ -44,6 +64,10 @@ int main() {
     for (int i = 0; i < offsets.size(); ++i) {
         cout << "(" << offsets[i] << ", " << lengths[i] << ", " << nextChars[i] << ")\n";
     }
+
+    string decompressed = decompress(offsets, lengths, nextChars);
+    
+    cout << "\nDecompressed string: " << decompressed << endl;
 
     return 0;
 }
